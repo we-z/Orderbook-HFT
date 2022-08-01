@@ -8,6 +8,7 @@ apt-get upgrade
 timedatectl set-timezone America/New_York
 git clone https://github.com/we-z/orderbook-hft.git
 apt install python3-pip
+apt install screen
 cd orderbook-hft
 pip3 install -r requirements.txt
 ```
