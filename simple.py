@@ -21,12 +21,14 @@ async def on_quote(data):
         if data.bid_size > (data.ask_size * 4):
             api.submit_order(symbol, 100, "buy", 
                                 "market", "day")
-            print('Buy at', data.ask_price)
+            print('Buy at BID', data.bid_price,
+                        'ASK', data.ask_price)
             t = False
         if data.ask_size > (data.bid_size * 4):
             api.submit_order(symbol, 100, "sell", 
                                 "market", "day")
-            print('Sell at', data.bid_price)
+            print('Sell at BID', data.bid_price,
+                        'ASK', data.ask_price)
             t = False
     if data.ask_size == data.bid_size and not t:
         api.close_all_positions()
