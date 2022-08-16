@@ -1,5 +1,5 @@
-import alpaca_trade_api as tradeapi
 import config
+import alpaca_trade_api as tradeapi
 
 # API object used to submit orders
 api = tradeapi.REST(
@@ -20,28 +20,28 @@ conn = tradeapi.Stream(
 async def on_quote(data):
     
     # Buying the Ask when there are more sellers
-    if (
-        data.ask_size > (data.bid_size * 1) 
-        and float(api.get_account().cash) > data.ask_price
-    ):
-        o = api.submit_order(
-            'SPY',1,"buy","limit","day", 
-            limit_price=str(data.ask_price)
-        )
-        api.cancel_order(o.id)
-        print('Buying at ASK', data.ask_price)
-    
+    if data.ask_size > data.bid_size: 
+        try:
+            o = api.submit_order(
+                'SPY', 10, "buy", "limit", "day", 
+                limit_price=str(data.ask_price)
+            )
+            api.cancel_order(o.id)
+            print(data.timestamp,'Buying at',data.ask_price)
+        except Exception as e:
+            pass
+
     # Selling to the Bid wheb there are more buyers
-    if (
-        data.bid_size > (data.ask_size * 1) 
-        and api.list_positions()
-    ):
-        o = api.submit_order(
-            'SPY',1,"sell","limit","day", 
-            limit_price=str(data.bid_price)
-        )
-        api.cancel_order(o.id)
-        print('Selling at BID', data.bid_price) 
+    if data.bid_size > data.ask_size:
+        try:
+            o = api.submit_order(
+                'SPY', 10, "sell", "limit", "day", 
+                limit_price=str(data.bid_price)
+            )
+            api.cancel_order(o.id)
+            print(data.timestamp,'Selling at',data.bid_price) 
+        except Exception as e:
+            pass
 
 # Go Live
 conn.run()
