@@ -20,7 +20,7 @@ conn = tradeapi.Stream(
 async def on_quote(data):
     
     # Buying the Ask when there are more sellers
-    if data.ask_size > data.bid_size: 
+    if data.bid_size > data.ask_size * 3: 
         try:
             o = api.submit_order(
                 'SPY', 10, "buy", "limit", "day", 
@@ -32,7 +32,7 @@ async def on_quote(data):
             pass
 
     # Selling to the Bid wheb there are more buyers
-    if data.bid_size > data.ask_size:
+    if data.ask_size > data.bid_size * 3:
         try:
             o = api.submit_order(
                 'SPY', 10, "sell", "limit", "day", 
